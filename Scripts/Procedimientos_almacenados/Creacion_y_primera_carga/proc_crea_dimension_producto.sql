@@ -11,6 +11,9 @@ Autor: Carlos Audelo
 	Si flag = 1, Crea la tabla sino existe y la llena con los datos de la empresa
 */
 BEGIN
+	DECLARE fechaTiempoETL DATETIME;
+    SET fechaTiempoETL = NOW();
+
 	IF flag = 0 THEN 
 		DROP TABLE IF EXISTS producto;
 	END IF;
@@ -71,7 +74,7 @@ BEGIN
 
     DROP TABLE IF EXISTS productos_nombre_repetido;
 
-    IF (SELECT COUNT(*) FROM producto WHERE producto_id = -1) = 0 THEN 
+    IF (SELECT COUNT(*) FROM producto WHERE producto_key = -1) = 0 THEN 
 	    INSERT INTO producto(producto_key, producto_nk, nombre_grupo, codigo_producto, nombre_producto, marca, tipo) 
 	VALUES(-1, -1, 'Desconocido', 'Desconocido', 'Desconocido', 'Desconocida', 'Desconocido');
     END IF;
