@@ -6,7 +6,6 @@ DELIMITER $$
 
 CREATE PROCEDURE `proc_crea_dimension_cliente`(IN flag bit(1), IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50))
 /*  
-Fecha: JUNIO 2017
 Autor: Carlos Audelo
 	Si flag = 0, Borra la tabla, la crea y la llena con los datos de la empresa
 	Si flag = 1, Crea la tabla sino existe y la llena con los datos de la empresa

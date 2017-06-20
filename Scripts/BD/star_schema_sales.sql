@@ -59,7 +59,7 @@ ENGINE = MyISAM;
 CREATE TABLE IF NOT EXISTS `datamart`.`agente` (
   `agente_key` INT NOT NULL AUTO_INCREMENT,
   `agente_nk` BIGINT(20) NOT NULL,
-  `nombre_agente` VARCHAR(245) NOT NULL DEFAULT 'DESCONOCIDO',
+  `nombre_agente` VARCHAR(245) NOT NULL DEFAULT 'Desconocido',
   `tipo_agente` VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
   `estatus_agente` VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
   `sexo` VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
