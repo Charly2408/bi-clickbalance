@@ -59,7 +59,7 @@ BEGIN
         END AS sexo, 
         'Actual', 
         CURDATE() 
-		FROM ", baseDatosProd, ".asociado as a 
+		FROM ", baseDatosProd, ".asociado
 		WHERE es_agente = 1 and empresa = ", idEmpresa,";");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
@@ -68,7 +68,7 @@ BEGIN
 		INSERT INTO agente(agente_key, agente_nk, nombre_agente, tipo_agente, estatus_agente, sexo) 
 		VALUES(-1, -1, 'Desconocido', 'Desconocido', 'Desconocido', 'Desconocido');
 	END IF;
-	
+
 	CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'agente', (SELECT COUNT(*) FROM agente));
 END
 $$
