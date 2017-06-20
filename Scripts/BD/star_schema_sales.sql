@@ -8,19 +8,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema datamart
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema mydb
+-- Schema datamart
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 ;
-USE `mydb` ;
+CREATE SCHEMA IF NOT EXISTS `datamart` DEFAULT CHARACTER SET utf8 ;
+USE `datamart` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`producto`
+-- Table `datamart`.`producto`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`producto` (
+CREATE TABLE IF NOT EXISTS `datamart`.`producto` (
   `producto_key` INT NOT NULL AUTO_INCREMENT,
   `producto_nk` BIGINT(20) NOT NULL,
   `nombre_grupo` VARCHAR(30) NOT NULL DEFAULT 'DESCONOCIDO',
@@ -36,9 +36,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`cliente`
+-- Table `datamart`.`cliente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`cliente` (
+CREATE TABLE IF NOT EXISTS `datamart`.`cliente` (
   `cliente_key` INT NOT NULL AUTO_INCREMENT,
   `cliente_nk` BIGINT(20) NOT NULL,
   `nombre_cliente` VARCHAR(245) NOT NULL DEFAULT 'Desconocido',
@@ -54,9 +54,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`agente`
+-- Table `datamart`.`agente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`agente` (
+CREATE TABLE IF NOT EXISTS `datamart`.`agente` (
   `agente_key` INT NOT NULL AUTO_INCREMENT,
   `agente_nk` BIGINT(20) NOT NULL,
   `nombre_agente` VARCHAR(245) NOT NULL DEFAULT 'DESCONOCIDO',
@@ -72,9 +72,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`empresa`
+-- Table `datamart`.`empresa`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`empresa` (
+CREATE TABLE IF NOT EXISTS `datamart`.`empresa` (
   `empresa_key` INT NOT NULL AUTO_INCREMENT,
   `empresa_nk` BIGINT(20) NOT NULL,
   `razon_social` VARCHAR(245) NOT NULL DEFAULT 'Desconocida',
@@ -90,9 +90,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`moneda`
+-- Table `datamart`.`moneda`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`moneda` (
+CREATE TABLE IF NOT EXISTS `datamart`.`moneda` (
   `moneda_key` INT NOT NULL AUTO_INCREMENT,
   `moneda_nk` INT NOT NULL,
   `nombre_moneda` VARCHAR(50) NOT NULL DEFAULT 'Desconocido',
@@ -107,9 +107,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`tiempo`
+-- Table `datamart`.`tiempo`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`tiempo` (
+CREATE TABLE IF NOT EXISTS `datamart`.`tiempo` (
   `fecha_key` INT NOT NULL,
   `fecha` DATE NOT NULL,
   `anio` TINYINT(1) NOT NULL,
@@ -122,9 +122,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`info_pago`
+-- Table `datamart`.`info_pago`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`info_pago` (
+CREATE TABLE IF NOT EXISTS `datamart`.`info_pago` (
   `info_pago_key` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `tipo_pago` VARCHAR(7) NOT NULL DEFAULT 'Ninguno',
   `estatus_pago` VARCHAR(7) NOT NULL,
@@ -137,9 +137,9 @@ DEFAULT CHARACTER SET = big5;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`plaza`
+-- Table `datamart`.`plaza`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`plaza` (
+CREATE TABLE IF NOT EXISTS `datamart`.`plaza` (
   `plaza_key` INT NOT NULL AUTO_INCREMENT,
   `plaza_nk` BIGINT(20) NOT NULL,
   `nombre_plaza` VARCHAR(100) NOT NULL DEFAULT 'Desconocido',
@@ -153,9 +153,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`territorio`
+-- Table `datamart`.`territorio`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`territorio` (
+CREATE TABLE IF NOT EXISTS `datamart`.`territorio` (
   `territorio_key` BIGINT(20) NOT NULL,
   `codigo_postal_nk` BIGINT(20) NOT NULL,
   `codigo_postal` VARCHAR(6) NOT NULL DEFAULT '00000',
@@ -172,9 +172,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`info_movimiento`
+-- Table `datamart`.`info_movimiento`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`info_movimiento` (
+CREATE TABLE IF NOT EXISTS `datamart`.`info_movimiento` (
   `info_movimiento_key` INT NOT NULL AUTO_INCREMENT,
   `tipo_movimiento_nk` BIGINT(20) NOT NULL,
   `grupo` VARCHAR(20) NOT NULL DEFAULT 'Desconocido',
@@ -192,9 +192,9 @@ ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`fact_ventas`
+-- Table `datamart`.`fact_ventas`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `mydb`.`fact_ventas` (
+CREATE TABLE IF NOT EXISTS `datamart`.`fact_ventas` (
   `fact_venta_key` INT NOT NULL AUTO_INCREMENT,
   `cliente_key` INT NOT NULL,
   `producto_key` INT NOT NULL,
@@ -229,57 +229,57 @@ CREATE TABLE IF NOT EXISTS `mydb`.`fact_ventas` (
   UNIQUE INDEX `ix_fact_venta_key` (`fact_venta_key` ASC),
   CONSTRAINT `fk_fact_ventas_cliente`
     FOREIGN KEY (`cliente_key`)
-    REFERENCES `mydb`.`cliente` (`cliente_key`)
+    REFERENCES `datamart`.`cliente` (`cliente_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_agente`
     FOREIGN KEY (`agente_key`)
-    REFERENCES `mydb`.`agente` (`agente_key`)
+    REFERENCES `datamart`.`agente` (`agente_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_producto`
     FOREIGN KEY (`producto_key`)
-    REFERENCES `mydb`.`producto` (`producto_key`)
+    REFERENCES `datamart`.`producto` (`producto_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_empresa`
     FOREIGN KEY (`empresa_key`)
-    REFERENCES `mydb`.`empresa` (`empresa_key`)
+    REFERENCES `datamart`.`empresa` (`empresa_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_moneda`
     FOREIGN KEY (`moneda_key`)
-    REFERENCES `mydb`.`moneda` (`moneda_key`)
+    REFERENCES `datamart`.`moneda` (`moneda_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_tiempo_venta`
     FOREIGN KEY (`tiempo_venta_key`)
-    REFERENCES `mydb`.`tiempo` (`fecha_key`)
+    REFERENCES `datamart`.`tiempo` (`fecha_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_tiempo_pago`
     FOREIGN KEY (`tiempo_pago_key`)
-    REFERENCES `mydb`.`tiempo` (`fecha_key`)
+    REFERENCES `datamart`.`tiempo` (`fecha_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_info_pago`
     FOREIGN KEY (`info_pago_key`)
-    REFERENCES `mydb`.`info_pago` (`info_pago_key`)
+    REFERENCES `datamart`.`info_pago` (`info_pago_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_plaza`
     FOREIGN KEY (`plaza_key`)
-    REFERENCES `mydb`.`plaza` (`plaza_key`)
+    REFERENCES `datamart`.`plaza` (`plaza_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_territorio`
     FOREIGN KEY (`territorio_plaza_key`)
-    REFERENCES `mydb`.`territorio` (`territorio_key`)
+    REFERENCES `datamart`.`territorio` (`territorio_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_fact_ventas_info_movimiento1`
     FOREIGN KEY (`info_movimiento_key`)
-    REFERENCES `mydb`.`info_movimiento` (`info_movimiento_key`)
+    REFERENCES `datamart`.`info_movimiento` (`info_movimiento_key`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
