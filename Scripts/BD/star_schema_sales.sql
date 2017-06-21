@@ -124,15 +124,17 @@ ENGINE = MyISAM;
 -- Table `datamart`.`info_pago`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `datamart`.`info_pago` (
-  `info_pago_key` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `tipo_pago` VARCHAR(7) NOT NULL DEFAULT 'Ninguno',
-  `estatus_pago` VARCHAR(7) NOT NULL,
+  `info_pago_key` INT NOT NULL AUTO_INCREMENT,
+  `tipo_pago` VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
+  `codigo_tipo_pago` TINYINT(4) NOT NULL,,
+  `estatus_pago` VARCHAR(11) NOT NULL 'Desconocido',
   `version_actual_flag` VARCHAR(10) NOT NULL DEFAULT 'Actual',
   `ultima_actualizacion` DATE NOT NULL DEFAULT 1901-01-01,
   PRIMARY KEY (`info_pago_key`),
-  UNIQUE INDEX `ix_info_pago_key` (`info_pago_key` ASC))
-ENGINE = MyISAM
-DEFAULT CHARACTER SET = big5;
+  UNIQUE INDEX `ix_info_pago_key` (`info_pago_key` ASC),
+  INDEX `ix_codigo_tipo_pago` (`codigo_tipo_pago` ASC),
+  INDEX `ix_estatus_pago` (`estatus_pago` ASC))
+ENGINE = MyISAM;
 
 
 -- -----------------------------------------------------
