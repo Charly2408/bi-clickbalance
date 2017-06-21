@@ -84,8 +84,11 @@ BEGIN
 	DROP TABLE IF EXISTS tmp_tipopago_bi;
 	DROP TABLE IF EXISTS tmp_estatuspago_bi;
 
-	INSERT INTO info_pago(info_pago_key, tipo_pago, codigo_tipo_pago, estatus_pago) 
-	VALUES(-1, 'Desconocido', -1, 'Desconocido');
+	IF (SELECT COUNT(*) FROM info_pago WHERE info_pago_key = -1) = 0 THEN 
+		INSERT INTO info_pago(info_pago_key, tipo_pago, codigo_tipo_pago, estatus_pago) 
+		VALUES(-1, 'Desconocido', -1, 'Desconocido');
+	END IF;
 
+	CALL proc_inserta_registro_historico_etl(0, fechaTiempoETL, 'info_pago', (SELECT COUNT(*) FROM info_pago));
 END 
 $$

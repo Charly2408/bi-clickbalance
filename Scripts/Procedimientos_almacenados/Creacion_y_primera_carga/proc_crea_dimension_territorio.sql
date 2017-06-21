@@ -77,6 +77,7 @@ BEGIN
     IF (SELECT COUNT(*) FROM territorio WHERE territorio_key = -1) = 0 THEN 
 	    INSERT INTO territorio (territorio_key, codigo_postal_nk, codigo_postal, pais, estado, localidad) 
 		VALUES(-1, -1, '00000', 'Desconocido', 'Desconocido', 'Desconocida');
+	END IF;
 
     CALL proc_inserta_registro_historico_etl(0, fechaTiempoETL, 'territorio', (SELECT COUNT(*) FROM territorio));
 END
