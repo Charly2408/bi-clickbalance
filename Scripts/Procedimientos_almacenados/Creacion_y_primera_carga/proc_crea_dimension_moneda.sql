@@ -11,6 +11,9 @@ Autor: Carlos Audelo
 	Si flag = 1, Crea la tabla sino existe y la llena con los datos
 */
 BEGIN
+	DECLARE fechaTiempoETL DATETIME;
+    SET fechaTiempoETL = NOW();
+	
 	IF flag = 0 THEN 
 		DROP TABLE IF EXISTS moneda;
 	END IF;
@@ -37,10 +40,11 @@ BEGIN
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 
-    IF (SELECT COUNT(*) FROM empresa WHERE empresa_key = -1) = 0 THEN 
+    IF (SELECT COUNT(*) FROM moneda WHERE moneda_key = -1) = 0 THEN 
 	    INSERT INTO .moneda(moneda_key, moneda_nk, nombre_moneda, abreviatura) 
 		VALUES(-1, -1, 'Desconocido', 'Desconocida');
 	END IF;
 
+	CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'moneda', (SELECT COUNT(*) FROM moneda));
 END
 $$
