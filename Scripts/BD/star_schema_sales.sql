@@ -97,7 +97,6 @@ CREATE TABLE IF NOT EXISTS `datamart`.`moneda` (
   `moneda_nk` INT NOT NULL,
   `nombre_moneda` VARCHAR(50) NOT NULL DEFAULT 'Desconocido',
   `abreviatura` VARCHAR(11) NOT NULL DEFAULT 'Desconocida',
-  `cambio_a_peso_mexicano` DECIMAL(16,4) NOT NULL,
   `version_actual_flag` VARCHAR(10) NOT NULL DEFAULT 'Actual',
   `ultima_actualizacion` DATE NOT NULL DEFAULT 1901-01-01,
   PRIMARY KEY (`moneda_key`),
