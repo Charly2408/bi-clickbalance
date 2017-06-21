@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `datamart`.`territorio` (
   `codigo_postal` VARCHAR(6) NOT NULL DEFAULT '00000',
   `pais` VARCHAR(100) NOT NULL DEFAULT 'Desconocido',
   `estado` VARCHAR(100) NOT NULL DEFAULT 'Desconocido',
-  `localidad` VARCHAR(100) NOT NULL DEFAULT 'Desconocido',
+  `localidad` VARCHAR(100) NOT NULL DEFAULT 'Desconocida',
   `version_actual_flag` VARCHAR(10) NOT NULL DEFAULT 'Actual',
   `ultima_actualizacion` DATE NOT NULL DEFAULT 1901-01-01,
   PRIMARY KEY (`territorio_key`),
