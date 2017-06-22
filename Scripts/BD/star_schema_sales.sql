@@ -203,16 +203,14 @@ CREATE TABLE IF NOT EXISTS `datamart`.`fact_ventas` (
   `empresa_key` INT NOT NULL,
   `moneda_key` INT NOT NULL,
   `plaza_key` INT NOT NULL,
-  `territorio_plaza_key` BIGINT(20) NOT NULL,
+  `territorio_key` BIGINT(20) NOT NULL,
   `info_pago_key` INT NOT NULL,
   `info_movimiento_key` INT NOT NULL,
   `tiempo_venta_key` INT NOT NULL,
-  `tiempo_pago_key` INT NOT NULL,
+  `es_agente_primario` VARCHAR(11) NOT NULL,
   `porcentaje_participacion` DECIMAL(16,4) NOT NULL,
-  `precio` DECIMAL(16,4) NOT NULL,
+  `importe` DECIMAL(16,4) NOT NULL,
   `cantidad` DECIMAL(16,4) NOT NULL,
-  `costo` DECIMAL(16,4) NOT NULL,
-  `saldo` DECIMAL(16,4) NOT NULL,
   `version_actual_flag` VARCHAR(10) NOT NULL DEFAULT 'Actual',
   `ultima_actualizacion` DATE NOT NULL DEFAULT 1901-01-01,
   INDEX `ix_fact_ventas_cliente_key` (`cliente_key` ASC),
@@ -227,63 +225,8 @@ CREATE TABLE IF NOT EXISTS `datamart`.`fact_ventas` (
   INDEX `ix_fact_ventas_territorio_plaza_key` (`territorio_plaza_key` ASC),
   INDEX `ix_info_movimiento_key` (`info_movimiento_key` ASC),
   PRIMARY KEY (`fact_venta_key`),
-  UNIQUE INDEX `ix_fact_venta_key` (`fact_venta_key` ASC),
-  CONSTRAINT `fk_fact_ventas_cliente`
-    FOREIGN KEY (`cliente_key`)
-    REFERENCES `datamart`.`cliente` (`cliente_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_agente`
-    FOREIGN KEY (`agente_key`)
-    REFERENCES `datamart`.`agente` (`agente_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_producto`
-    FOREIGN KEY (`producto_key`)
-    REFERENCES `datamart`.`producto` (`producto_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_empresa`
-    FOREIGN KEY (`empresa_key`)
-    REFERENCES `datamart`.`empresa` (`empresa_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_moneda`
-    FOREIGN KEY (`moneda_key`)
-    REFERENCES `datamart`.`moneda` (`moneda_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_tiempo_venta`
-    FOREIGN KEY (`tiempo_venta_key`)
-    REFERENCES `datamart`.`tiempo` (`fecha_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_tiempo_pago`
-    FOREIGN KEY (`tiempo_pago_key`)
-    REFERENCES `datamart`.`tiempo` (`fecha_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_info_pago`
-    FOREIGN KEY (`info_pago_key`)
-    REFERENCES `datamart`.`info_pago` (`info_pago_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_plaza`
-    FOREIGN KEY (`plaza_key`)
-    REFERENCES `datamart`.`plaza` (`plaza_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_territorio`
-    FOREIGN KEY (`territorio_plaza_key`)
-    REFERENCES `datamart`.`territorio` (`territorio_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_fact_ventas_info_movimiento1`
-    FOREIGN KEY (`info_movimiento_key`)
-    REFERENCES `datamart`.`info_movimiento` (`info_movimiento_key`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  UNIQUE INDEX `ix_fact_venta_key` (`fact_venta_key` ASC))
+ENGINE = MyISAM;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
