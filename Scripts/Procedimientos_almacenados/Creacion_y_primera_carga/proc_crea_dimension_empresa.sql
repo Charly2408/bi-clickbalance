@@ -50,7 +50,7 @@ BEGIN
 		'Actual', 
         CURDATE() 
 		FROM ", baseDatosProd, ".empresa
-		WHERE id = ", idEmpresa, ";");
+		WHERE id = ", idEmpresa, " AND created_at <= '", fechaTiempoETL, "';");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 

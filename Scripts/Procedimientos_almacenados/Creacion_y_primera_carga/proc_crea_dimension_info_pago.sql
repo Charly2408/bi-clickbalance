@@ -86,6 +86,6 @@ BEGIN
 		VALUES(-1, 'Desconocido', -1, 'Desconocido');
 	END IF;
 
-	CALL proc_inserta_registro_historico_etl(0, fechaTiempoETL, 'info_pago', (SELECT COUNT(*) FROM info_pago));
+	CALL proc_inserta_registro_historico_etl(1, 0, fechaTiempoETL, 'info_pago', (SELECT COUNT(*) FROM info_pago));
 END 
 $$

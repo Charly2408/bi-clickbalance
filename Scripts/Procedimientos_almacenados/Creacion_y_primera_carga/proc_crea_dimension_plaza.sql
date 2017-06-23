@@ -34,7 +34,7 @@ BEGIN
 		'Actual', 
 		CURDATE()
 		FROM ", baseDatosProd, ".plaza 
-		WHERE empresa = ", idEmpresa, ";");
+		WHERE empresa = ", idEmpresa, " AND created_at <= '", fechaTiempoETL, "';");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 
@@ -43,6 +43,6 @@ BEGIN
 		VALUES(-1, -1, 'Desconocido', 0);
 	END IF;
 	
-	CALL proc_inserta_registro_historico_etl(idEmpresa, fechaTiempoETL, 'plaza', (SELECT COUNT(*) FROM plaza));
+	CALL proc_inserta_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'plaza', (SELECT COUNT(*) FROM plaza));
 END
 $$

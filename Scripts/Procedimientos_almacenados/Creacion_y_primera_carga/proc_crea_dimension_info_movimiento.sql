@@ -40,7 +40,7 @@ BEGIN
 		SELECT id, 
 		IF(descripcion IS NULL OR descripcion = '', 'Desconocido', descripcion) as nombre, 
     	FROM ", baseDatosProd, ".tipo_venta 
-    	WHERE empresa = ", idEmpresa, " AND es_venta = 1;");
+    	WHERE empresa = ", idEmpresa, " AND es_venta = 1 AND created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -75,7 +75,8 @@ BEGIN
 				CLOSE curEstatus;
 				LEAVE estatus_loop;
 			END IF;
-			INSERT INTO info_movimiento(tipo_movimiento_nk, grupo, nombre_movimiento, estatus, codigo_estatus, naturaleza, version_actual_flag, ultima_actualizacion) VALUES (idTipoVenta, 'Venta', IF(codigoEstatus = '3', CONCAT("Cancelación ", vTipoVenta), vTipoVenta), vEstatus, codigoEstatus, IF(codigoEstatus = '3', -1, 1), 'Actual', CURDATE());
+			INSERT INTO info_movimiento(tipo_movimiento_nk, grupo, nombre_movimiento, estatus, codigo_estatus, naturaleza, version_actual_flag, ultima_actualizacion) 
+			VALUES (idTipoVenta, 'Venta', IF(codigoEstatus = '3', CONCAT("Cancelación ", vTipoVenta), vTipoVenta), vEstatus, codigoEstatus, IF(codigoEstatus = '3', -1, 1), 'Actual', CURDATE());
 		END LOOP estatus_loop;
 	END LOOP tipoventa_loop;
 	CLOSE curTipoVenta;

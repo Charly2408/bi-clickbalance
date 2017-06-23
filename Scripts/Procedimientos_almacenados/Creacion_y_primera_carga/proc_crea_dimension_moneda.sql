@@ -42,6 +42,6 @@ BEGIN
 		VALUES(-1, -1, 'Desconocido', 'Desconocida');
 	END IF;
 
-	CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'moneda', (SELECT COUNT(*) FROM moneda));
+	CALL proc_crea_registro_historico_etl(1, 0, fechaTiempoETL, 'moneda', (SELECT COUNT(*) FROM moneda));
 END
 $$

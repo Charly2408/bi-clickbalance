@@ -76,6 +76,6 @@ BEGIN
 		VALUES(-1, -1, '00000', 'Desconocido', 'Desconocido', 'Desconocida');
 	END IF;
 
-    CALL proc_inserta_registro_historico_etl(0, fechaTiempoETL, 'territorio', (SELECT COUNT(*) FROM territorio));
+    CALL proc_inserta_registro_historico_etl(1, 0, fechaTiempoETL, 'territorio', (SELECT COUNT(*) FROM territorio));
 END
 $$
