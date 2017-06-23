@@ -4,16 +4,13 @@ DROP PROCEDURE IF EXISTS `proc_crea_dimension_empresa`;
 
 DELIMITER $$
 
-CREATE PROCEDURE `proc_crea_dimension_empresa`(IN flag bit(1), IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50))
+CREATE PROCEDURE `proc_crea_dimension_empresa`(IN flag bit(1), IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50), IN fechaTiempoETL DATETIME)
 /*  
 Autor: Carlos Audelo
 	Si flag = 0, Borra la tabla, la crea y la llena con los datos de la empresa
 	Si flag = 1, Crea la tabla sino existe y la llena con los datos de la empresa
 */
 BEGIN
-	DECLARE fechaTiempoETL DATETIME;
-    SET fechaTiempoETL = NOW();
-
 	IF flag = 0 THEN 
 		DROP TABLE IF EXISTS empresa;
 	END IF;

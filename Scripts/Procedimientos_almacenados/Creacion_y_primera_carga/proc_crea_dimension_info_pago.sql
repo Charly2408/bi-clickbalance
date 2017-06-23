@@ -4,14 +4,13 @@ DROP PROCEDURE IF EXISTS `proc_crea_dimension_info_pago`;
 
 DELIMITER $$
 
-CREATE PROCEDURE `proc_crea_dimension_info_pago`(IN flag bit(1), IN baseDatosProd varchar(50), IN baseDatosBI varchar(50))
+CREATE PROCEDURE `proc_crea_dimension_info_pago`(IN flag bit(1), IN baseDatosProd varchar(50), IN baseDatosBI varchar(50), IN fechaTiempoETL DATETIME)
 /*  
 Autor: Carlos Audelo
 	Si flag = 0, Borra la tabla, la crea y la llena con los datos de la empresa
 	Si flag = 1, Crea la tabla sino existe y la llena con los datos de la empresa
 */
 BEGIN
-	DECLARE fechaTiempoETL DATETIME;
 	DECLARE tipoPagoCode TINYINT(4);
 	DECLARE vTipoPago VARCHAR(11);
 	DECLARE vEstatusPago VARCHAR(11);
@@ -19,8 +18,6 @@ BEGIN
     DECLARE curTipoPago CURSOR FOR SELECT codigo_tipo_pago, tipo_pago FROM tmp_tipopago_bi;
     DECLARE curEstatusPago CURSOR FOR SELECT estatus_pago FROM tmp_estatuspago_bi;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-    SET fechaTiempoETL = NOW();
 
 	IF flag = 0 THEN 
 		DROP TABLE IF EXISTS info_pago;

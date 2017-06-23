@@ -4,14 +4,13 @@ DROP PROCEDURE IF EXISTS `proc_crea_dimension_info_movimiento`;
 
 DELIMITER $$
 
-CREATE PROCEDURE `proc_crea_dimension_info_movimiento`(IN flag bit(1),  IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50))
+CREATE PROCEDURE `proc_crea_dimension_info_movimiento`(IN flag bit(1),  IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50), IN fechaTiempoETL DATETIME)
 /*
 Autor: Carlos Audelo
 	Si flag = 0, Borra la tabla, la crea y la llena con los datos de la empresa
 	Si flag = 1, Crea la tabla sino existe y la llena con los datos de la empresa
 */
 BEGIN
-	DECLARE fechaTiempoETL DATETIME;
 	DECLARE idTipoVenta BIGINT(20);
 	DECLARE vTipoVenta VARCHAR(50);
 	DECLARE codigoEstatus VARCHAR(1);
@@ -20,8 +19,6 @@ BEGIN
     DECLARE curTipoVenta CURSOR FOR SELECT id, nombre FROM tmp_tipoventa_bi;
     DECLARE curEstatus CURSOR FOR SELECT codigo_estatus, estatus FROM tmp_estatus_bi;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-    
-    SET fechaTiempoETL = NOW();
 
 	IF flag = 0 THEN 
 		DROP TABLE IF EXISTS tipo_movimiento;

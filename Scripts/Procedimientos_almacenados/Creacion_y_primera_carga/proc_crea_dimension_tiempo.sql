@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS `proc_crea_dimension_tiempo`;
 
 DELIMITER $$
 
-CREATE PROCEDURE `proc_crea_dimension_tiempo`(IN flag bit(1), IN baseDatosBI varchar(50), fechaInicial DATE, fechaFinal DATE)
+CREATE PROCEDURE `proc_crea_dimension_tiempo`(IN flag bit(1), IN baseDatosBI varchar(50), IN fechaInicial DATE, IN fechaFinal DATE, IN fechaTiempoETL DATETIME)
 /*  
 Autor: Carlos Audelo
 	Si flag = 0, Borra la tabla, la crea y la llena con los datos
@@ -13,9 +13,6 @@ Autor: Carlos Audelo
 BEGIN
 	DECLARE varDate DATE DEFAULT fechaInicial;
     DECLARE varMes tinyint;
-    DECLARE fechaTiempoETL DATETIME;
-
-    SET fechaTiempoETL = NOW();
 
 	IF flag = 0 THEN 
 
