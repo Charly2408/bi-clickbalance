@@ -97,6 +97,17 @@ BEGIN
     	INNER JOIN tmp_cliente_version_actual AS tcva ON (fv.cliente_key = tcva.cliente_key_historica)
     SET fv.cliente_key = tcva.cliente_key_historica;
 
+    -- Manejando la inserción de registros con llaves naturales que no existen en la BD de análisis
+    INSERT INTO cliente(cliente_nk, nombre_cliente, estado_civil, regimen, sexo, version_actual_flag, ultima_actualizacion)
+    SELECT tc.cliente_nk, tc.nombre_cliente, tc.estado_civil, tc.regimen, tc.sexo, tc.version_actual_flag, tc.ultima_actualizacion
+    FROM tmp_cliente as tc 
+    	LEFT JOIN cliente as c ON (tc.cliente_nk = c.cliente_nk)
+    WHERE c.cliente_nk IS NULL;
+
+    DROP TABLE IF EXISTS tmp_cliente;
+    DROP TABLE IF EXISTS tmp_cliente_a_historico;
+    DROP TABLE IF EXISTS tmp_cliente_version_actual;
+
 	CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'cliente', (SELECT COUNT(*) FROM cliente));
 END
 $$
