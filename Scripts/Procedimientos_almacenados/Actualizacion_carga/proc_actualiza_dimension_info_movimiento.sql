@@ -1,14 +1,12 @@
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `proc_crea_dimension_info_movimiento`;
+DROP PROCEDURE IF EXISTS `proc_actualiza_dimension_info_movimiento`;
 
 DELIMITER $$
 
-CREATE PROCEDURE `proc_crea_dimension_info_movimiento`(IN flag bit(1),  IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50), IN fechaTiempoETL DATETIME)
+CREATE PROCEDURE `proc_actualiza_dimension_info_movimiento`(IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50), IN fechaTiempoETL DATETIME)
 /*
 Autor: Carlos Audelo
-	Si flag = 0, Borra la tabla, la crea y la llena con los datos de la empresa
-	Si flag = 1, Crea la tabla sino existe y la llena con los datos de la empresa
 */
 BEGIN
 	DECLARE idTipoVenta BIGINT(20);
@@ -19,10 +17,6 @@ BEGIN
     DECLARE curTipoVenta CURSOR FOR SELECT id, nombre FROM tmp_tipoventa_bi;
     DECLARE curEstatus CURSOR FOR SELECT codigo_estatus, estatus FROM tmp_estatus_bi;
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
-
-	IF flag = 0 THEN 
-		DROP TABLE IF EXISTS tipo_movimiento;
-	END IF;
 
 	DROP TABLE IF EXISTS tmp_estatus_bi;
 
@@ -36,31 +30,17 @@ BEGIN
 	('3', 'Cancelado'),
 	('', 'Desconocido');
 
+	CALL proc_consulta_registro_historico_etl(idEmpresa, 'info_movimiento', @ultimaAct);
+
 	DROP TABLE IF EXISTS tmp_tipoventa_bi;
 
 	SET @query = CONCAT("CREATE TABLE tmp_tipoventa_bi 
 		SELECT id, 
 		IF(descripcion IS NULL OR descripcion = '', 'Desconocido', descripcion) as nombre, 
     	FROM ", baseDatosProd, ".tipo_venta 
-    	WHERE empresa = ", idEmpresa, " AND es_venta = 1 AND created_at <= '", fechaTiempoETL, "';");
+    	WHERE empresa = ", idEmpresa, " AND es_venta = 1 AND created_at > '", @ultimaAct, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
-
-	CREATE TABLE IF NOT EXISTS info_movimiento (
-		info_movimiento_key INT NOT NULL AUTO_INCREMENT,
-		tipo_movimiento_nk BIGINT(20) NOT NULL,
-		grupo VARCHAR(20) NOT NULL DEFAULT 'Desconocido',
-		nombre_movimiento VARCHAR(65) NOT NULL DEFAULT 'Desconocido',
-		estatus VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
-		codigo_estatus VARCHAR(1) NOT NULL,
-		naturaleza TINYINT(1) NOT NULL,
-		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
-		PRIMARY KEY (info_movimiento_key),
-		UNIQUE INDEX ix_tipo_movimiento_key (info_movimiento_key ASC),
-		INDEX ix_tipo_movimiento_nk (tipo_movimiento_nk ASC),
-		INDEX ix_codigo_estatus (codigo_estatus ASC))
-	ENGINE = MyISAM;
 
 	OPEN curTipoVenta;
 	tipoventa_loop: LOOP
@@ -85,11 +65,6 @@ BEGIN
 
 	DROP TABLE IF EXISTS tmp_tipoventa_bi;
 	DROP TABLE IF EXISTS tmp_estatus_bi;
-
-	IF (SELECT COUNT(*) FROM info_movimiento WHERE info_movimiento_key = -1) = 0 THEN
-		INSERT INTO info_movimiento(info_movimiento_key, tipo_movimiento_nk, grupo, nombre_movimiento, estatus, codigo_estatus, naturaleza) 
-		VALUES(-1, -1, 'Desconocido', 'Desconocido', 'Desconocido', '', 0);
-    END IF;
 
     CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'info_movimiento', (SELECT COUNT(*) FROM info_movimiento));
 END 
