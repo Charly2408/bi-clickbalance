@@ -25,7 +25,9 @@ BEGIN
 		UNIQUE INDEX ix_historico_etl_id (historico_etl_id ASC))
 	ENGINE = MyISAM;
 
-	INSERT INTO historico_etl(empresa_cb_id, ultima_actualizacion, nombre_dimension_o_hecho, numero_registros) 
-	VALUES (idEmpresa, ultimaActualizacion, nombreTabla, numRegistros);
+	IF flag = 1 THEN 
+		INSERT INTO historico_etl(empresa_cb_id, ultima_actualizacion, nombre_dimension_o_hecho, numero_registros) 
+		VALUES (idEmpresa, ultimaActualizacion, nombreTabla, numRegistros);
+	END IF;
 END
 $$
