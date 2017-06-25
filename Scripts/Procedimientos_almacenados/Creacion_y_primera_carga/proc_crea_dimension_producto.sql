@@ -51,26 +51,7 @@ BEGIN
 		WHERE p.empresa = ", idEmpresa, " AND p.created_at <= '", fechaTiempoETL, "';");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
-
-    DROP TABLE IF EXISTS productos_nombre_repetido;
-
-	CREATE TABLE IF NOT EXISTS productos_nombre_repetido 
-		SELECT producto_key FROM producto 
-		WHERE nombre_producto IN 
-			(
-				SELECT nombre_producto 
-				FROM producto 
-				GROUP BY producto HAVING count(*) > 1
-			);
-
-	CREATE INDEX ix_producto_key ON productos_nombre_repetido(producto_key);
-
-	UPDATE producto AS p 
-    	INNER JOIN  productos_nombre_repetido AS pnr ON (p.producto_key = pnr.producto_key) 
-    SET p.producto = CONVERT(CONCAT(p.producto, '-' ,p.codigo) USING utf8);
-
-    DROP TABLE IF EXISTS productos_nombre_repetido;
-
+    
     IF (SELECT COUNT(*) FROM producto WHERE producto_key = -1) = 0 THEN 
 	    INSERT INTO producto(producto_key, producto_nk, nombre_grupo, codigo_producto, nombre_producto, marca, tipo) 
 	VALUES(-1, -1, 'Desconocido', 'Desconocido', 'Desconocido', 'Desconocida', 'Desconocido');

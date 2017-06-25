@@ -95,7 +95,7 @@ BEGIN
 
     UPDATE fact_venta AS fv 
     	INNER JOIN tmp_agente_version_actual AS tava ON (fv.agente_key = tava.agente_key_historica)
-    SET fv.agente_key = tava.agente_key_historica;
+    SET fv.agente_key = tava.agente_key_actual;
 
     -- Manejando la inserción de registros con llaves naturales que no existen en la BD de análisis
     INSERT INTO agente(agente_nk, nombre_agente, tipo_agente, estatus_agente, sexo, version_actual_flag, ultima_actualizacion) 

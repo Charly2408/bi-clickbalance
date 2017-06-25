@@ -95,7 +95,7 @@ BEGIN
 
     UPDATE fact_venta AS fv 
     	INNER JOIN tmp_cliente_version_actual AS tcva ON (fv.cliente_key = tcva.cliente_key_historica)
-    SET fv.cliente_key = tcva.cliente_key_historica;
+    SET fv.cliente_key = tcva.cliente_key_actual;
 
     -- Manejando la inserción de registros con llaves naturales que no existen en la BD de análisis
     INSERT INTO cliente(cliente_nk, nombre_cliente, estado_civil, regimen, sexo, version_actual_flag, ultima_actualizacion)

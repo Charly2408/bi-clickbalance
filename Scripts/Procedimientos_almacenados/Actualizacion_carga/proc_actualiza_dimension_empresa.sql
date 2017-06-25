@@ -79,7 +79,7 @@ BEGIN
 
     UPDATE fact_venta AS fv 
     	INNER JOIN tmp_empresa_version_actual AS teva ON (fv.empresa_key = teva.empresa_key_historica)
-    SET fv.empresa_key = teva.empresa_key_historica;
+    SET fv.empresa_key = teva.empresa_key_actual;
 
     -- Manejando la inserción de registros con llaves naturales que no existen en la BD de análisis
     INSERT INTO empresa(empresa_nk, razon_social, nombre_comercial, regimen, sector, version_actual_flag, ultima_actualizacion)

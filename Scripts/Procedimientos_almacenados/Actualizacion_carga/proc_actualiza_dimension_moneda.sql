@@ -63,7 +63,7 @@ BEGIN
 
     UPDATE fact_venta AS fv 
     	INNER JOIN tmp_moneda_version_actual AS tmva ON (fv.moneda_key = tmva.moneda_key_historica)
-    SET fv.moneda_key = tmva.moneda_key_historica;
+    SET fv.moneda_key = tmva.moneda_key_actual;
 
     -- Manejando la inserción de registros con llaves naturales que no existen en la BD de análisis
     INSERT INTO moneda(moneda_nk, nombre_moneda, abreviatura, version_actual_flag, ultima_actualizacion) 

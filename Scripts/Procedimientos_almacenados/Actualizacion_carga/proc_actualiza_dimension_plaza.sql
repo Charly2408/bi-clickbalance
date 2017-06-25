@@ -57,13 +57,13 @@ BEGIN
 
     CREATE TABLE IF NOT EXISTS tmp_plaza_version_actual
     SELECT p.plaza_key AS plaza_key_actual, tph.plaza_key AS plaza_key_historica
-    FROM plaza AS m
+    FROM plaza AS p
     	INNER JOIN tmp_plaza_a_historico AS tph ON (p.plaza_nk = tph.plaza_nk)
     WHERE p.version_actual_flag = 'Actual';
 
     UPDATE fact_venta AS fv 
     	INNER JOIN tmp_plaza_version_actual AS tpva ON (fv.plaza_key = tpva.plaza_key_historica)
-    SET fv.plaza_key = tpva.plaza_key_historica;
+    SET fv.plaza_key = tpva.plaza_key_actual;
 
     -- Manejando la inserción de registros con llaves naturales que no existen en la BD de análisis
     INSERT INTO plaza(plaza_nk, nombre_plaza, numero_plaza, version_actual_flag, ultima_actualizacion) 
