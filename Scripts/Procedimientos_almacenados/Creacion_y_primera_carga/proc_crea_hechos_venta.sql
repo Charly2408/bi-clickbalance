@@ -12,7 +12,7 @@ Autor: Carlos Audelo
 */
 BEGIN
 	IF flag = 0 THEN 
-		DROP TABLE IF EXISTS fact_ventas;
+		DROP TABLE IF EXISTS fact_venta;
 	END IF;
 
 	DROP TABLE IF EXISTS tmp_agente_venta;
@@ -186,7 +186,7 @@ BEGIN
 	PREPARE myQue FROM @qIndx;
 	EXECUTE myQue;
 
-	CREATE TABLE IF NOT EXISTS fact_ventas (
+	CREATE TABLE IF NOT EXISTS fact_venta (
 		fact_venta_key INT NOT NULL AUTO_INCREMENT,
 		cliente_key INT NOT NULL,
 		producto_key INT NOT NULL,
@@ -204,22 +204,22 @@ BEGIN
 		cantidad DECIMAL(16,4) NOT NULL,
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
 		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
-		INDEX ix_fact_ventas_cliente_key (cliente_key ASC),
-		INDEX ix_fact_ventas_producto_key (producto_key ASC),
-		INDEX ix_fact_ventas_agente_key (agente_key ASC),
-		INDEX ix_fact_ventas_empresa_key (empresa_key ASC),
-		INDEX ix_fact_ventas_moneda_key (moneda_key ASC),
-		INDEX ix_fact_ventas_tiempo_venta_key (tiempo_venta_key ASC),
-		INDEX ix_fact_ventas_tiempo_pago_key (tiempo_pago_key ASC),
-		INDEX ix_fact_ventas_info_pago_key (info_pago_key ASC),
-		INDEX ix_fact_ventas_plaza_key (plaza_key ASC),
-		INDEX ix_fact_ventas_territorio_plaza_key (territorio_plaza_key ASC),
+		INDEX ix_fact_venta_cliente_key (cliente_key ASC),
+		INDEX ix_fact_venta_producto_key (producto_key ASC),
+		INDEX ix_fact_venta_agente_key (agente_key ASC),
+		INDEX ix_fact_venta_empresa_key (empresa_key ASC),
+		INDEX ix_fact_venta_moneda_key (moneda_key ASC),
+		INDEX ix_fact_venta_tiempo_venta_key (tiempo_venta_key ASC),
+		INDEX ix_fact_venta_tiempo_pago_key (tiempo_pago_key ASC),
+		INDEX ix_fact_venta_info_pago_key (info_pago_key ASC),
+		INDEX ix_fact_venta_plaza_key (plaza_key ASC),
+		INDEX ix_fact_venta_territorio_plaza_key (territorio_plaza_key ASC),
 		INDEX ix_info_movimiento_key (info_movimiento_key ASC),
 		PRIMARY KEY (fact_venta_key),
 		UNIQUE INDEX ix_fact_venta_key (fact_venta_key ASC))
 	ENGINE = MyISAM;
 
-	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".fact_ventas(cliente_key, producto_key, agente_key, empresa_key,
+	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".fact_venta(cliente_key, producto_key, agente_key, empresa_key,
 		moneda_key, plaza_key, territorio_key, info_pago_key, info_movimiento_key, tiempo_venta_key, es_agente_primario,
 		porcentaje_participacion, importe, cantidad, version_actual_flag, ultima_actualizacion) 
 		SELECT th.venta_id,
@@ -260,6 +260,6 @@ BEGIN
     -- DROP TABLE IF EXISTS tmp_hechos_concentrado;
     DROP TABLE IF EXISTS tmp_agente_venta;
         
-    CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'fact_ventas', (SELECT COUNT(*) FROM fact_ventas));
+    CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'fact_venta', (SELECT COUNT(*) FROM fact_venta));
 END
 $$
