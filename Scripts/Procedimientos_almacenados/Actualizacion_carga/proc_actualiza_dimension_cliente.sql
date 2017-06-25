@@ -27,7 +27,7 @@ BEGIN
 
 	CALL proc_consulta_registro_historico_etl(idEmpresa, 'cliente', @ultimaAct);
 
-	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".cliente(cliente_nk, nombre_cliente, estado_civil, regimen, 
+	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_cliente(cliente_nk, nombre_cliente, estado_civil, regimen, 
 		sexo, version_actual_flag, ultima_actualizacion) 
 		select id, 
 		CASE regimen 

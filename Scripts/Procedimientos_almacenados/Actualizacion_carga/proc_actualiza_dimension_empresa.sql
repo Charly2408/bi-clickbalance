@@ -25,7 +25,7 @@ BEGIN
 		INDEX ix_empresa_nk (empresa_nk ASC))
 	ENGINE = MyISAM;
 
-	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".empresa(empresa_nk, razon_social, nombre_comercial, regimen, sector, version_actual_flag, ultima_actualizacion) 
+	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_empresa(empresa_nk, razon_social, nombre_comercial, regimen, sector, version_actual_flag, ultima_actualizacion) 
 		SELECT id,
 		IF(razon_social IS NULL OR razon_social = '', 'Desconocida', razon_social) AS razon_social, 
 		IF(nombre_comercial IS NULL OR  nombre_comercial = '', 'Desconocido', nombre_comercial) AS nombre_comercial, 
@@ -81,7 +81,7 @@ BEGIN
     	INNER JOIN tmp_empresa_version_actual AS teva ON (fv.empresa_key = teva.empresa_key_historica)
     SET fv.empresa_key = teva.empresa_key_historica;
 
-     -- Manejando la inserción de registros con llaves naturales que no existen en la BD de análisis
+    -- Manejando la inserción de registros con llaves naturales que no existen en la BD de análisis
     INSERT INTO empresa(empresa_nk, razon_social, nombre_comercial, regimen, sector, version_actual_flag, ultima_actualizacion)
     SELECT te.empresa_nk, te.razon_social, te.nombre_comercial, te.regimen, te.sector, te.version_actual_flag, te.ultima_actualizacion
     FROM tmp_empresa as te 

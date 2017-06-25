@@ -33,7 +33,9 @@ BEGIN
 		IF(abreviatura IS NULL OR  abreviatura = '', 'Desconocida', abreviatura) AS abr_moneda, 
 		'Actual', 
         CURDATE() 
-		FROM ", baseDatosProd, ".moneda;");
+		FROM ", baseDatosProd, ".moneda
+		WHERE created_at <= '", fechaTiempoETL, "';");
+
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 
