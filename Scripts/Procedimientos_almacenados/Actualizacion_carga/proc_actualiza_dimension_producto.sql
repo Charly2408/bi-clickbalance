@@ -26,6 +26,8 @@ BEGIN
 		INDEX ix_producto_nk (producto_nk ASC))
 	ENGINE = MyISAM;
 
+	CALL proc_consulta_registro_historico_etl(idEmpresa, 'producto', @ultimaAct);
+
 	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_producto(producto_nk, nombre_grupo, codigo_producto, nombre_producto, 
 		marca, tipo, version_actual_flag, ultima_actualizacion) 
 		SELECT 
@@ -44,7 +46,7 @@ BEGIN
 		CURDATE() 
 		FROM ",baseDatosProd,".producto AS p 
 		LEFT JOIN ", baseDatosProd, ".grupo AS g ON (p.grupo_id = g.id)
-		WHERE p.empresa = ", idEmpresa, " AND p.created_at <= '", fechaTiempoETL, "';");
+		WHERE p.empresa = ", idEmpresa," AND (created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "');");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 

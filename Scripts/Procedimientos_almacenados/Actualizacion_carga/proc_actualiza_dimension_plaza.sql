@@ -23,6 +23,8 @@ BEGIN
 		INDEX ix_plaza_nk (plaza_nk ASC))
 	ENGINE = MyISAM;
 
+    CALL proc_consulta_registro_historico_etl(idEmpresa, 'plaza', @ultimaAct);
+
 	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_plaza(plaza_nk, nombre_plaza, numero_plaza, version_actual_flag, ultima_actualizacion) 
 		SELECT  id,
 		IF(nombre IS NULL OR  nombre = '', 'Desconocido', nombre) AS nombre, 

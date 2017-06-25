@@ -25,6 +25,8 @@ BEGIN
 		INDEX ix_empresa_nk (empresa_nk ASC))
 	ENGINE = MyISAM;
 
+    CALL proc_consulta_registro_historico_etl(idEmpresa, 'empresa', @ultimaAct);
+
 	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_empresa(empresa_nk, razon_social, nombre_comercial, regimen, sector, version_actual_flag, ultima_actualizacion) 
 		SELECT id,
 		IF(razon_social IS NULL OR razon_social = '', 'Desconocida', razon_social) AS razon_social, 

@@ -23,6 +23,8 @@ BEGIN
 		INDEX ix_moneda_nk (moneda_nk ASC)) 
 	ENGINE = MyISAM;
 
+    CALL proc_consulta_registro_historico_etl(0, 'moneda', @ultimaAct);
+
 	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_moneda(moneda_nk, nombre_moneda, abreviatura, version_actual_flag, ultima_actualizacion) 
 		SELECT  id, 
 		IF(nombre_moneda IS NULL OR nombre_moneda = '', 'Desconocido', nombre_moneda) AS nom_moneda, 
