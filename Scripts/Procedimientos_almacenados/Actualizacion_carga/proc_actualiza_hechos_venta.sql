@@ -1,20 +1,14 @@
 DELIMITER ;
 
-DROP PROCEDURE IF EXISTS `proc_crea_hechos_venta`;
+DROP PROCEDURE IF EXISTS `proc_actualiza_hechos_venta`;
 
 DELIMITER $$
 
-CREATE PROCEDURE `proc_crea_hechos_venta`(IN flag bit(1), IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50), IN fechaTiempoETL DATETIME)
+CREATE PROCEDURE `proc_actualiza_hechos_venta`(IN idEmpresa integer, IN baseDatosProd varchar(50), IN baseDatosBI varchar(50), IN fechaTiempoETL DATETIME)
 /*
 Autor: Carlos Audelo
-	Si flag = 0, Borra la tabla, la crea y la llena con los datos de la empresa
-	Si flag = 1, Crea la tabla sino existe y la llena con los datos de la empresa
 */
 BEGIN
-	IF flag = 0 THEN 
-		DROP TABLE IF EXISTS fact_venta;
-	END IF;
-
 	DROP TABLE IF EXISTS tmp_agente_venta;
 
 	CREATE TABLE IF NOT EXISTS tmp_agente_venta (
@@ -27,11 +21,13 @@ BEGIN
 		PRIMARY KEY(id))
 	ENGINE = MyISAM;
 
-	SET @query = CONCAT("INSERT INTO tmp_agente_venta (empresa_id, venta_id, agente_asociado_id, es_agente_primario, porcentaje_participacion)
+	CALL proc_consulta_registro_historico_etl(idEmpresa, 'fact_venta', @ultimaAct);
+
+	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_agente_venta (empresa_id, venta_id, agente_asociado_id, es_agente_primario, porcentaje_participacion)
 		SELECT v.empresa, v.id as venta_id, v.agente_asociado_id, 1 AS es_agente_primario, 
 			IFNULL(v.porcentaje_participacion, 0) AS porcentaje_participacion
 		FROM ", baseDatosProd, ".venta as v
-		WHERE v.empresa = ", idEmpresa, " AND v.created_at <= '", fechaTiempoETL, "';");
+		WHERE v.empresa = ", idEmpresa, " AND (v.created_at > '", @ultimaAct, "' OR v.updated_at > '", @ultimaAct, "');");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -40,7 +36,7 @@ BEGIN
 			IFNULL(av.porcentaje_participacion, 0) AS porcentaje_participacion
 		FROM ", baseDatosProd, ".agente_venta as av
 		INNER JOIN ", baseDatosProd, ".venta AS v
-		WHERE av.empresa = ", idEmpresa, " AND v.created_at <= '", fechaTiempoETL, "';");
+		WHERE av.empresa = ", idEmpresa, " AND (av.created_at > '", @ultimaAct, "' OR av.updated_at > '", @ultimaAct, "');");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -73,7 +69,50 @@ BEGIN
 	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_hechos_concentrado (venta_id, agente_id, cliente_id,  empresa_id, 
 		tipo_venta_id, estatus_venta, estatus_pago, tipo_pago, moneda_id, plaza_id, producto_id, codigo_postal, fecha_venta_id,
 		es_agente_primario, porcentaje_participacion, precio, cantidad, version_actual_flag, ultima_actualizacion) 
-		SELECT v.id AS venta_o_nota_id,
+		SELECT v.id AS venta_id,
+			IF(av.agente_asociado_id IS NULL OR av.agente_asociado_id = 0, -1, av.agente_asociado_id) AS agente_id, 
+			IFNULL(v.cliente_asociado_id, -1) AS cliente_id, 
+			IFNULL(v.empresa, -1) AS empresa_id, 
+			IF(tv.id IS NULL, -1, tv.id) AS tipo_venta_id, 
+            IF(v.estatus IS NULL OR v.estatus = '', '', v.estatus) AS estatus_venta, 
+            CASE v.saldo 
+				WHEN 0 THEN 'Pagada' 
+				ELSE IF(v.saldo IS NULL,'Desconocido', 'Pendiente') 
+			END AS estatus_pago, 
+			IFNULL(v.tipo_pago, -1) as tipo_pago, 
+			IFNULL(v.moneda_id, -1) as moneda_id, 
+			IFNULL(pl.id, -1) AS plaza_id, 
+			IFNULL(dv.producto_id, -1) AS producto_id, 
+			IF(da.codigo_postal IS NULL OR da.codigo_postal = '', '00000', da.codigo_postal) AS codigo_postal,
+			IF(v.fecha_cancelacion IS NULL OR v.fecha_cancelacion = '', '1901-01-01', v.fecha_cancelacion) + 0 AS fecha_venta_id, 
+			IFNULL(av.es_agente_primario, -1) AS es_agente_primario,
+			ROUND(IF(av.porcentaje_participacion IS NULL OR av.porcentaje_participacion = 0, 100, av.porcentaje_participacion), 4) AS porcentaje_participacion,
+			ROUND(IFNULL(dv.precio_venta, 0), 4) AS precio,
+			ROUND(IFNULL(dv.cantidad, 0),4) * -1 AS cantidad, 
+			'Actual' AS version_actual_flag,
+            CURDATE() 
+		FROM ", baseDatosProd,".venta AS v
+			INNER JOIN ", baseDatosProd,".detalle_venta AS dv ON (dv.venta_id = v.id)
+			INNER JOIN ", baseDatosBI,".tmp_agente_venta AS av ON (av.venta_id = dv.venta_id)
+			INNER JOIN ", baseDatosProd,".tipo_venta AS tv ON (v.tipoventa_id = tv.id)
+			LEFT JOIN ", baseDatosProd,".plaza AS pl ON (pl.empresa = dv.empresa and pl.numero = v.plaza)
+			LEFT JOIN ", baseDatosProd,".direccion_asociado AS da ON (v.direccion_asociado_id = da.id)
+		WHERE v.empresa = ", idEmpresa," and tv.es_venta = 1 AND v.estatus = '3' AND v.updated_at > '", @ultimaAct, "' AND v.created_at <= '", @ultimaAct, "';");
+	PREPARE myQue FROM @query;
+	EXECUTE myQue;
+
+	UPDATE fact_venta
+	SET version_actual_flag = 'No Actual'
+	WHERE venta_id IN 
+		(
+			SELECT DISTINCT venta_id
+			FROM tmp_hechos_concentrado
+		) AND version_actual_flag = 'Actual';
+
+	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_hechos_concentrado (venta_id, agente_id, cliente_id,  empresa_id, 
+		tipo_venta_id, estatus_venta, estatus_pago, tipo_pago, moneda_id, plaza_id, producto_id, codigo_postal, fecha_venta_id,
+		es_agente_primario, porcentaje_participacion, precio, cantidad, version_actual_flag, ultima_actualizacion) 
+		SELECT v.id AS venta_id,
 			IF(av.agente_asociado_id IS NULL OR av.agente_asociado_id = 0, -1, av.agente_asociado_id) AS agente_id, 
 			IFNULL(v.cliente_asociado_id, -1) AS cliente_id, 
 			IFNULL(v.empresa, -1) AS empresa_id, 
@@ -105,16 +144,16 @@ BEGIN
 			INNER JOIN ", baseDatosProd,".detalle_venta AS dv ON (dv.venta_id = v.id)
 			INNER JOIN ", baseDatosBI,".tmp_agente_venta AS av ON (av.venta_id = dv.venta_id)
 			INNER JOIN ", baseDatosProd,".tipo_venta AS tv ON (v.tipoventa_id = tv.id)
-			LEFT JOIN ", baseDatosProd,".plaza AS pl ON (pl.empresa = dv.empresa and pl.numero = v.plaza)
+			LEFT JOIN ", baseDatosProd,".plaza AS pl ON (pl.empresa = dv.empresa AND pl.numero = v.plaza)
 			LEFT JOIN ", baseDatosProd,".direccion_asociado AS da ON (v.direccion_asociado_id = da.id)
-		WHERE v.empresa = ", idEmpresa," and tv.es_venta = 1 AND v.estatus IN ('0', '3') AND v.created_at <= '", fechaTiempoETL, "';");
+		WHERE v.empresa = ", idEmpresa," AND tv.es_venta = 1 AND v.estatus IN ('0', '3') AND v.created_at > '", @ultimaAct, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
 	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_hechos_concentrado (venta_id, agente_id, cliente_id,  empresa_id, 
 		tipo_venta_id, estatus_venta, estatus_pago, tipo_pago, moneda_id, plaza_id, producto_id, codigo_postal, fecha_venta_id,
 		es_agente_primario, porcentaje_participacion, precio, cantidad, version_actual_flag, ultima_actualizacion) 
-		SELECT v.id AS venta_o_nota_id,
+		SELECT v.id AS venta_id,
 			IF(av.agente_asociado_id IS NULL OR av.agente_asociado_id = 0, -1, av.agente_asociado_id) AS agente_id, 
 			IFNULL(v.cliente_asociado_id, -1) AS cliente_id, 
 			IFNULL(v.empresa, -1) AS empresa_id, 
@@ -142,7 +181,7 @@ BEGIN
 			INNER JOIN ", baseDatosProd,".tipo_venta AS tv ON (v.tipoventa_id = tv.id)
 			LEFT JOIN ", baseDatosProd,".plaza AS pl ON (pl.empresa = dv.empresa and pl.numero = v.plaza)
 			LEFT JOIN ", baseDatosProd,".direccion_asociado AS da ON (v.direccion_asociado_id = da.id)
-		WHERE v.empresa = ", idEmpresa," and tv.es_venta = 1 AND v.estatus = '3' AND v.created_at <= '", fechaTiempoETL, "';");
+		WHERE v.empresa = ", idEmpresa," and tv.es_venta = 1 AND v.estatus = '3' AND v.created_at > '", @ultimaAct, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -185,40 +224,6 @@ BEGIN
 	SET @qIndx = CONCAT("CREATE INDEX ix_tmp_hechos_concentrado_tipo_pago ON ", baseDatosBI,".tmp_hechos_concentrado(tipo_pago);");
 	PREPARE myQue FROM @qIndx;
 	EXECUTE myQue;
-
-	CREATE TABLE IF NOT EXISTS fact_venta (
-		fact_venta_key INT NOT NULL AUTO_INCREMENT,
-		venta_nk BIGINT(20) NOT NULL,
-		cliente_key INT NOT NULL,
-		producto_key INT NOT NULL,
-		agente_key INT NOT NULL,
-		empresa_key INT NOT NULL,
-		moneda_key INT NOT NULL,
-		plaza_key INT NOT NULL,
-		territorio_key BIGINT(20) NOT NULL,
-		info_pago_key INT NOT NULL,
-		info_movimiento_key INT NOT NULL,
-		tiempo_venta_key INT NOT NULL,
-		es_agente_primario VARCHAR(11) NOT NULL,
-		porcentaje_participacion DECIMAL(16,4) NOT NULL,
-		importe DECIMAL(16,4) NOT NULL,
-		cantidad DECIMAL(16,4) NOT NULL,
-		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
-		INDEX ix_fact_venta_cliente_key (cliente_key ASC),
-		INDEX ix_fact_venta_producto_key (producto_key ASC),
-		INDEX ix_fact_venta_agente_key (agente_key ASC),
-		INDEX ix_fact_venta_empresa_key (empresa_key ASC),
-		INDEX ix_fact_venta_moneda_key (moneda_key ASC),
-		INDEX ix_fact_venta_tiempo_venta_key (tiempo_venta_key ASC),
-		INDEX ix_fact_venta_tiempo_pago_key (tiempo_pago_key ASC),
-		INDEX ix_fact_venta_info_pago_key (info_pago_key ASC),
-		INDEX ix_fact_venta_plaza_key (plaza_key ASC),
-		INDEX ix_fact_venta_territorio_plaza_key (territorio_plaza_key ASC),
-		INDEX ix_info_movimiento_key (info_movimiento_key ASC),
-		PRIMARY KEY (fact_venta_key),
-		UNIQUE INDEX ix_fact_venta_key (fact_venta_key ASC))
-	ENGINE = MyISAM;
 
 	INSERT INTO fact_venta(venta_nk, cliente_key, producto_key, agente_key, empresa_key,
 	moneda_key, plaza_key, territorio_key, info_pago_key, info_movimiento_key, tiempo_venta_key, es_agente_primario,
