@@ -32,7 +32,7 @@ BEGIN
 		'Actual', 
         CURDATE() 
 		FROM ", baseDatosProd, ".moneda
-		WHERE created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "';");
+		WHERE (created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "') AND created_at <= '", fechaTiempoETL, "';");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 

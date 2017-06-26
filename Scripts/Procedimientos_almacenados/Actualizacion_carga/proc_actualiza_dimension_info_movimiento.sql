@@ -38,7 +38,7 @@ BEGIN
 		SELECT id, 
 		IF(descripcion IS NULL OR descripcion = '', 'Desconocido', descripcion) as nombre, 
     	FROM ", baseDatosProd, ".tipo_venta 
-    	WHERE empresa = ", idEmpresa, " AND es_venta = 1 AND created_at > '", @ultimaAct, "';");
+    	WHERE empresa = ", idEmpresa, " AND es_venta = 1 AND created_at > '", @ultimaAct, "' AND created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 

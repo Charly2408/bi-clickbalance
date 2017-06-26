@@ -27,7 +27,7 @@ BEGIN
 		SELECT v.empresa, v.id as venta_id, v.agente_asociado_id, 1 AS es_agente_primario, 
 			IFNULL(v.porcentaje_participacion, 0) AS porcentaje_participacion
 		FROM ", baseDatosProd, ".venta as v
-		WHERE v.empresa = ", idEmpresa, " AND (v.created_at > '", @ultimaAct, "' OR v.updated_at > '", @ultimaAct, "');");
+		WHERE v.empresa = ", idEmpresa, " AND (v.created_at > '", @ultimaAct, "' OR v.updated_at > '", @ultimaAct, "') AND v.created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -36,7 +36,7 @@ BEGIN
 			IFNULL(av.porcentaje_participacion, 0) AS porcentaje_participacion
 		FROM ", baseDatosProd, ".agente_venta as av
 		INNER JOIN ", baseDatosProd, ".venta AS v ON (av.venta_id = v.id)
-		WHERE av.empresa = ", idEmpresa, " AND (av.created_at > '", @ultimaAct, "' OR av.updated_at > '", @ultimaAct, "');");
+		WHERE av.empresa = ", idEmpresa, " AND (av.created_at > '", @ultimaAct, "' OR av.updated_at > '", @ultimaAct, "') AND created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -97,7 +97,7 @@ BEGIN
 			INNER JOIN ", baseDatosProd,".tipo_venta AS tv ON (v.tipoventa_id = tv.id)
 			LEFT JOIN ", baseDatosProd,".plaza AS pl ON (pl.empresa = dv.empresa and pl.numero = v.plaza)
 			LEFT JOIN ", baseDatosProd,".direccion_asociado AS da ON (v.direccion_asociado_id = da.id)
-		WHERE v.empresa = ", idEmpresa," and tv.es_venta = 1 AND v.estatus = '3' AND v.updated_at > '", @ultimaAct, "' AND v.created_at <= '", @ultimaAct, "';");
+		WHERE v.empresa = ", idEmpresa," and tv.es_venta = 1 AND v.estatus = '3' AND v.updated_at > '", @ultimaAct, "' AND v.created_at <= '", @ultimaAct, "' AND v.updated_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -146,7 +146,7 @@ BEGIN
 			INNER JOIN ", baseDatosProd,".tipo_venta AS tv ON (v.tipoventa_id = tv.id)
 			LEFT JOIN ", baseDatosProd,".plaza AS pl ON (pl.empresa = dv.empresa AND pl.numero = v.plaza)
 			LEFT JOIN ", baseDatosProd,".direccion_asociado AS da ON (v.direccion_asociado_id = da.id)
-		WHERE v.empresa = ", idEmpresa," AND tv.es_venta = 1 AND v.estatus IN ('0', '3') AND v.created_at > '", @ultimaAct, "';");
+		WHERE v.empresa = ", idEmpresa," AND tv.es_venta = 1 AND v.estatus IN ('0', '3') AND v.created_at > '", @ultimaAct, "' AND v.created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -181,7 +181,7 @@ BEGIN
 			INNER JOIN ", baseDatosProd,".tipo_venta AS tv ON (v.tipoventa_id = tv.id)
 			LEFT JOIN ", baseDatosProd,".plaza AS pl ON (pl.empresa = dv.empresa and pl.numero = v.plaza)
 			LEFT JOIN ", baseDatosProd,".direccion_asociado AS da ON (v.direccion_asociado_id = da.id)
-		WHERE v.empresa = ", idEmpresa," and tv.es_venta = 1 AND v.estatus = '3' AND v.created_at > '", @ultimaAct, "';");
+		WHERE v.empresa = ", idEmpresa," AND tv.es_venta = 1 AND v.estatus = '3' AND v.created_at > '", @ultimaAct, "' AND v.created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 

@@ -32,7 +32,7 @@ BEGIN
 		'Actual', 
 		CURDATE()
 		FROM ", baseDatosProd, ".plaza 
-		WHERE empresa = ", idEmpresa, " AND (created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "');");
+		WHERE empresa = ", idEmpresa, " AND (created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "') AND created_at <= '", fechaTiempoETL, "';");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 

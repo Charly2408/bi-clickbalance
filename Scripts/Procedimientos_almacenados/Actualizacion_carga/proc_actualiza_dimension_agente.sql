@@ -55,7 +55,7 @@ BEGIN
         'Actual', 
         CURDATE() 
 		FROM ", baseDatosProd, ".asociado
-		WHERE es_agente = 1 AND empresa = ", idEmpresa," AND (created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "');");
+		WHERE es_agente = 1 AND empresa = ", idEmpresa," AND (created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "') AND created_at <= '", fechaTiempoETL, "';");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 

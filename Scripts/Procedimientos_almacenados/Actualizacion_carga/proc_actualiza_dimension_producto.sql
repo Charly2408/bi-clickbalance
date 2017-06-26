@@ -46,7 +46,7 @@ BEGIN
 		CURDATE() 
 		FROM ",baseDatosProd,".producto AS p 
 		LEFT JOIN ", baseDatosProd, ".grupo AS g ON (p.grupo_id = g.id)
-		WHERE p.empresa = ", idEmpresa," AND (created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "');");
+		WHERE p.empresa = ", idEmpresa," AND (created_at > '", @ultimaAct, "' OR updated_at > '", @ultimaAct, "') AND created_at <= '", fechaTiempoETL, "';");
     PREPARE myQue FROM @query;
     EXECUTE myQue;
 
