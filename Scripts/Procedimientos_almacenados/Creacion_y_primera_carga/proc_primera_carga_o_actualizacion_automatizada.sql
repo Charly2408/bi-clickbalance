@@ -57,6 +57,7 @@ BEGIN
 			IF done THEN
 				LEAVE empresa_loop;
 			END IF;
+			CALL proc_crea_dimension_tiempo(flagBorradoTablas, fechaInicial, fechaFinal, fechaTiempoETL);
 			CALL proc_actualiza_dimension_agente(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
 			CALL proc_actualiza_dimension_cliente(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);			
 			CALL proc_actualiza_dimension_empresa(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
