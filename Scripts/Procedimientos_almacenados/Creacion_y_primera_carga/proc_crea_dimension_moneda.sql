@@ -29,7 +29,7 @@ BEGIN
 
 	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".moneda(moneda_nk, nombre_moneda, abreviatura, version_actual_flag, ultima_actualizacion) 
 		SELECT  id, 
-		IF(nombre_moneda IS NULL OR nombre_moneda = '', 'Desconocido', nombre_moneda) AS nom_moneda, 
+		IF(nombre IS NULL OR nombre = '', 'Desconocido', nombre) AS nom_moneda, 
 		IF(abreviatura IS NULL OR  abreviatura = '', 'Desconocida', abreviatura) AS abr_moneda, 
 		'Actual', 
         CURDATE() 
@@ -40,7 +40,7 @@ BEGIN
     EXECUTE myQue;
 
     IF (SELECT COUNT(*) FROM moneda WHERE moneda_key = -1) = 0 THEN 
-	    INSERT INTO .moneda(moneda_key, moneda_nk, nombre_moneda, abreviatura) 
+	    INSERT INTO moneda(moneda_key, moneda_nk, nombre_moneda, abreviatura) 
 		VALUES(-1, -1, 'Desconocido', 'Desconocida');
 	END IF;
 

@@ -4,7 +4,7 @@ DROP PROCEDURE IF EXISTS `proc_crea_dimension_tiempo`;
 
 DELIMITER $$
 
-CREATE PROCEDURE `proc_crea_dimension_tiempo`(IN flag bit(1), IN baseDatosBI varchar(50), IN fechaInicial DATE, IN fechaFinal DATE, IN fechaTiempoETL DATETIME)
+CREATE PROCEDURE `proc_crea_dimension_tiempo`(IN flag bit(1), IN fechaInicial DATE, IN fechaFinal DATE, IN fechaTiempoETL DATETIME)
 /*  
 Autor: Carlos Audelo
 	Si flag = 0, Borra la tabla, la crea y la llena con los datos
@@ -14,12 +14,8 @@ BEGIN
 	DECLARE varDate DATE DEFAULT fechaInicial;
     DECLARE varMes tinyint;
 
-	IF flag = 0 THEN 
-
-		SET @qDelete = CONCAT("DROP TABLE IF EXISTS ", baseDatosBI,".tiempo;");
-        PREPARE myQue FROM @qDelete;
-        EXECUTE myQue;
-	
+	IF flag = 0 THEN
+		DROP TABLE IF EXISTS tiempo;
 	END IF;
 
 	CREATE TABLE IF NOT EXISTS tiempo (
@@ -40,11 +36,11 @@ BEGIN
         SET varDate := varDate + INTERVAL 1 DAY;
     END WHILE;
 
-    IF (SELECT COUNT(*) FROM tiempo WHERE tiempo_key = 19010101) = 0 THEN 
+    IF (SELECT COUNT(*) FROM tiempo WHERE fecha_key = 19010101) = 0 THEN 
 	    INSERT INTO tiempo(fecha_key, fecha, anio, mes, dia_del_mes, dia_nombre) 
 		VALUES(19010101, '1901-01-01', -1, 'N/D', -1, 'N/D');
-	IF END;
+	END IF;
 
-	CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'tiempo', (SELECT COUNT(*) FROM tiempo));
+	CALL proc_crea_registro_historico_etl(1, 0, fechaTiempoETL, 'tiempo', (SELECT COUNT(*) FROM tiempo));
 END
 $$

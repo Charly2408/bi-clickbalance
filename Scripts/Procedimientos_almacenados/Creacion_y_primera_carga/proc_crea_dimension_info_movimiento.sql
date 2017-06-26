@@ -21,7 +21,7 @@ BEGIN
     DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
 
 	IF flag = 0 THEN 
-		DROP TABLE IF EXISTS tipo_movimiento;
+		DROP TABLE IF EXISTS info_movimiento;
 	END IF;
 
 	DROP TABLE IF EXISTS tmp_estatus_bi;
@@ -40,7 +40,7 @@ BEGIN
 
 	SET @query = CONCAT("CREATE TABLE tmp_tipoventa_bi 
 		SELECT id, 
-		IF(descripcion IS NULL OR descripcion = '', 'Desconocido', descripcion) as nombre, 
+		IF(descripcion IS NULL OR descripcion = '', 'Desconocido', descripcion) as nombre
     	FROM ", baseDatosProd, ".tipo_venta 
     	WHERE empresa = ", idEmpresa, " AND es_venta = 1 AND created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;

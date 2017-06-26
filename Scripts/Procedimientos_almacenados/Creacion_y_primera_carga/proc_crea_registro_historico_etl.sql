@@ -12,7 +12,7 @@ Autor: Carlos Audelo
 */
 BEGIN
 	IF flag = 0 THEN 
-		DROP TABLE IF EXISTS empresa;
+		DROP TABLE IF EXISTS historico_etl;
 	END IF;
 
 	CREATE TABLE IF NOT EXISTS historico_etl (

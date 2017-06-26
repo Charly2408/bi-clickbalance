@@ -43,6 +43,6 @@ BEGIN
 		VALUES(-1, -1, 'Desconocido', 0);
 	END IF;
 	
-	CALL proc_inserta_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'plaza', (SELECT COUNT(*) FROM plaza));
+	CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'plaza', (SELECT COUNT(*) FROM plaza));
 END
 $$

@@ -24,7 +24,7 @@ BEGIN
 		marca VARCHAR(40) NOT NULL DEFAULT 'Desconocida',
 		tipo VARCHAR(11) NOT NULL DEFAULT 'DESCONOCIDO',
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',,
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',
 		PRIMARY KEY (producto_key),
 		UNIQUE INDEX ix_producto_key (producto_key ASC),
 		INDEX ix_producto_nk (producto_nk ASC))

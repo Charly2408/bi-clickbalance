@@ -40,7 +40,6 @@ BEGIN
 				CALL proc_crea_dimension_moneda(flagBorradoTablas, baseDatosProd, baseDatosBI, fechaTiempoETL);
 				CALL proc_crea_dimension_territorio(flagBorradoTablas, baseDatosProd, baseDatosBI, fechaTiempoETL);
 				CALL proc_crea_dimension_tiempo(flagBorradoTablas, fechaInicial, fechaFinal, fechaTiempoETL);
-				SET flagBorradoTablas = 1;
 			END IF;
 			CALL proc_crea_dimension_agente(flagBorradoTablas, empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
 			CALL proc_crea_dimension_cliente(flagBorradoTablas, empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);			
@@ -49,6 +48,7 @@ BEGIN
 			CALL proc_crea_dimension_plaza(flagBorradoTablas, empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
 			CALL proc_crea_dimension_producto(flagBorradoTablas, empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
 			CALL proc_crea_hechos_venta(flagBorradoTablas, empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
+			SET flagBorradoTablas = 1;
 		END LOOP empresa_loop;
 	ELSE
 		SET flagBorradoTablas = 1;

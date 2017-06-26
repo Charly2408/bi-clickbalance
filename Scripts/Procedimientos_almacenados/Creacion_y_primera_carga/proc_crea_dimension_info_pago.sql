@@ -29,7 +29,7 @@ BEGIN
 		codigo_tipo_pago TINYINT(4) NOT NULL,
 		tipo_pago VARCHAR(11) NOT NULL DEFAULT 'Desconocido');
 	
-	INSERT INTO tmp_tipopago_bi (tipo_pago_code, tipo_pago)
+	INSERT INTO tmp_tipopago_bi (codigo_tipo_pago, tipo_pago)
 	VALUES 
 	(0, 'Contado'),
 	(1, 'Crédito'),
@@ -73,7 +73,7 @@ BEGIN
 				CLOSE curEstatusPago;
 				LEAVE estatuspago_loop;
 			END IF;
-			INSERT INTO info_pago(tipo_pago, codigo_tipo_pago, estatus_pago, version_actual_flag, ultima_actualizacion) VALUES (tipoPagoCode, vTipoPago, vEstatusPago, 'Actual', CURDATE());
+			INSERT INTO info_pago(tipo_pago, codigo_tipo_pago, estatus_pago, version_actual_flag, ultima_actualizacion) VALUES (vTipoPago, tipoPagoCode, vEstatusPago, 'Actual', CURDATE());
 		END LOOP estatuspago_loop;
 	END LOOP tipopago_loop;
 	CLOSE curTipoPago;
@@ -86,6 +86,6 @@ BEGIN
 		VALUES(-1, 'Desconocido', -1, 'Desconocido');
 	END IF;
 
-	CALL proc_inserta_registro_historico_etl(1, 0, fechaTiempoETL, 'info_pago', (SELECT COUNT(*) FROM info_pago));
+	CALL proc_crea_registro_historico_etl(1, 0, fechaTiempoETL, 'info_pago', (SELECT COUNT(*) FROM info_pago));
 END 
 $$
