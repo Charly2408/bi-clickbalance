@@ -9,7 +9,7 @@ CREATE PROCEDURE `proc_actualiza_dimension_empresa`(IN idEmpresa integer, IN bas
 Autor: Carlos Audelo
 */
 BEGIN
-	DROP TABLE IF EXISTS tmp_empresa
+	DROP TABLE IF EXISTS tmp_empresa;
 
 	CREATE TABLE IF NOT EXISTS tmp_empresa (
 		empresa_key INT NOT NULL AUTO_INCREMENT,

@@ -12,7 +12,7 @@ BEGIN
 	DROP TABLE IF EXISTS tmp_territorio;
 
 	CREATE TABLE IF NOT EXISTS tmp_territorio (
-		territorio_key BIGINT(20) NOT NULL,
+		territorio_key BIGINT(20) AUTO_INCREMENT NOT NULL,
 		codigo_postal_nk BIGINT(20) NOT NULL,
 		codigo_postal VARCHAR(6) NOT NULL DEFAULT '00000',
 		pais VARCHAR(100) NOT NULL DEFAULT 'Desconocido',
@@ -55,11 +55,14 @@ BEGIN
     EXECUTE myQue;
 
     DELETE FROM territorio 
-    WHERE cod_postal_cb_id IN 
+    WHERE codigo_postal_nk IN 
     	(
     		SELECT cp_repetido_id 
     		FROM tmp_codigo_postal
     	);
+
+    DELETE FROM territorio
+   	WHERE codigo_postal = '00000';
 
     DROP TABLE IF EXISTS tmp_codigo_postal;
 
@@ -72,6 +75,6 @@ BEGIN
 
     DROP TABLE IF EXISTS tmp_territorio;
 
-    CALL proc_inserta_registro_historico_etl(1, 0, fechaTiempoETL, 'territorio', (SELECT COUNT(*) FROM territorio));
+    CALL proc_crea_registro_historico_etl(1, 0, fechaTiempoETL, 'territorio', (SELECT COUNT(*) FROM territorio));
 END
 $$

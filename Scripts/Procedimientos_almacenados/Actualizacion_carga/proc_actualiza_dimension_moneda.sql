@@ -27,7 +27,7 @@ BEGIN
 
 	SET @query = CONCAT("INSERT INTO ",baseDatosBI,".tmp_moneda(moneda_nk, nombre_moneda, abreviatura, version_actual_flag, ultima_actualizacion) 
 		SELECT  id, 
-		IF(nombre_moneda IS NULL OR nombre_moneda = '', 'Desconocido', nombre_moneda) AS nom_moneda, 
+		IF(nombre IS NULL OR nombre = '', 'Desconocido', nombre) AS nom_moneda, 
 		IF(abreviatura IS NULL OR  abreviatura = '', 'Desconocida', abreviatura) AS abr_moneda, 
 		'Actual', 
         CURDATE() 

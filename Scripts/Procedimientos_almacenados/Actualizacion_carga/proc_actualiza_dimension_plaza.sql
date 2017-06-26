@@ -78,6 +78,6 @@ BEGIN
     DROP TABLE IF EXISTS tmp_plaza_a_historico;
     DROP TABLE IF EXISTS tmp_plaza_version_actual;
 	
-	CALL proc_inserta_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'plaza', (SELECT COUNT(*) FROM plaza));
+	CALL proc_crea_registro_historico_etl(1, idEmpresa, fechaTiempoETL, 'plaza', (SELECT COUNT(*) FROM plaza));
 END
 $$

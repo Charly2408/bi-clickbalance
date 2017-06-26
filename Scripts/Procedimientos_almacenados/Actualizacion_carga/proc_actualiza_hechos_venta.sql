@@ -255,7 +255,7 @@ BEGIN
 	INNER JOIN empresa AS e ON (th.empresa_id = e.empresa_nk)
 	INNER JOIN info_movimiento AS im ON (th.tipo_venta_id = im.tipo_movimiento_nk AND th.estatus_venta = im.codigo_estatus) 
 	INNER JOIN info_pago AS ip ON (th.tipo_pago = ip.codigo_tipo_pago AND th.estatus_pago = ip.estatus_pago) 
-	LEFT JOIN moneda AS c ON (th.moneda_id = c.moneda_nk) 
+	LEFT JOIN moneda AS m ON (th.moneda_id = m.moneda_nk) 
 	INNER JOIN plaza AS pl ON (th.plaza_id = pl.plaza_nk)  
 	LEFT JOIN producto AS p ON (th.producto_id = p.producto_nk)
 	LEFT JOIN territorio AS t ON (th.codigo_postal = t.codigo_postal) 

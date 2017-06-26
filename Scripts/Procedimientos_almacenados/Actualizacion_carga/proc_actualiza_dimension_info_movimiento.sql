@@ -36,7 +36,7 @@ BEGIN
 
 	SET @query = CONCAT("CREATE TABLE tmp_tipoventa_bi 
 		SELECT id, 
-		IF(descripcion IS NULL OR descripcion = '', 'Desconocido', descripcion) as nombre, 
+		IF(descripcion IS NULL OR descripcion = '', 'Desconocido', descripcion) as nombre 
     	FROM ", baseDatosProd, ".tipo_venta 
     	WHERE empresa = ", idEmpresa, " AND es_venta = 1 AND created_at > '", @ultimaAct, "' AND created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
