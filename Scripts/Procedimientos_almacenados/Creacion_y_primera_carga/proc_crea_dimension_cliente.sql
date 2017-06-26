@@ -23,7 +23,7 @@ BEGIN
 		regimen VARCHAR(15) NOT NULL DEFAULT 'Desconocido',
 		sexo VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',
 		PRIMARY KEY (cliente_key),
 		UNIQUE INDEX ix_cliente_key (cliente_key ASC),
 		INDEX ix_cliente_nk (cliente_nk ASC))

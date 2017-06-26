@@ -17,7 +17,7 @@ BEGIN
 		nombre_moneda VARCHAR(50) NOT NULL DEFAULT 'Desconocido', 
 		abreviatura VARCHAR(11) NOT NULL DEFAULT 'Desconocida',
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual', 
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01, 
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01', 
 		PRIMARY KEY (moneda_key), 
 		UNIQUE INDEX ix_moneda_key (moneda_key ASC), 
 		INDEX ix_moneda_nk (moneda_nk ASC)) 

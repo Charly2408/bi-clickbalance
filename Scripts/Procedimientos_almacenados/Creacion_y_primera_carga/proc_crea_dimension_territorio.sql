@@ -27,7 +27,7 @@ BEGIN
 		estado VARCHAR(100) NOT NULL DEFAULT 'Desconocido',
 		localidad VARCHAR(100) NOT NULL DEFAULT 'Desconocida',
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',
 		PRIMARY KEY (territorio_key),
 		UNIQUE INDEX ix_territorio_key (territorio_key ASC),
 		INDEX ix_codigo_postal_nk (codigo_postal_nk ASC),

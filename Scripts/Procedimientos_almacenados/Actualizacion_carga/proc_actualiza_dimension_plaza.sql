@@ -17,7 +17,7 @@ BEGIN
 		nombre_plaza VARCHAR(100) NOT NULL DEFAULT 'Desconocido',
 		numero_plaza INT NOT NULL,
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',
 		PRIMARY KEY (plaza_key),
 		UNIQUE INDEX ix_plaza_key (plaza_key ASC),
 		INDEX ix_plaza_nk (plaza_nk ASC))

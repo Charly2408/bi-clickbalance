@@ -52,7 +52,7 @@ BEGIN
 		codigo_tipo_pago TINYINT(4) NOT NULL,
 		estatus_pago VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',
 		PRIMARY KEY (info_pago_key),
 		UNIQUE INDEX ix_info_pago_key (info_pago_key ASC),
 		INDEX ix_codigo_tipo_pago (codigo_tipo_pago ASC),

@@ -23,7 +23,7 @@ BEGIN
 		estatus_agente VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
 		sexo VARCHAR(11) NOT NULL DEFAULT 'Desconocido',
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',
 		PRIMARY KEY (agente_key),
 		UNIQUE INDEX ix_agente_key (agente_key ASC),
 		INDEX ix_agente_nk (agente_nk ASC))

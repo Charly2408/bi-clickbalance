@@ -66,7 +66,7 @@ BEGIN
 		precio DECIMAL(16,4) NOT NULL,
 		cantidad DECIMAL(16,4) NOT NULL,
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual', 
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01, 
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01', 
 		PRIMARY KEY(id))
 	ENGINE = MyISAM;
 
@@ -204,7 +204,7 @@ BEGIN
 		importe DECIMAL(16,4) NOT NULL,
 		cantidad DECIMAL(16,4) NOT NULL,
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',
 		INDEX ix_fact_venta_cliente_key (cliente_key ASC),
 		INDEX ix_fact_venta_producto_key (producto_key ASC),
 		INDEX ix_fact_venta_agente_key (agente_key ASC),

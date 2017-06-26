@@ -35,6 +35,7 @@ BEGIN
 				LEAVE empresa_loop;
 			END IF;
 			IF flagBorradoTablas = 0 THEN
+				CALL proc_crea_registro_historico_etl(0, 0, '0000-00-00 00:00:00', '', 0);
 				CALL proc_crea_dimension_info_pago(flagBorradoTablas, baseDatosProd, baseDatosBI, fechaTiempoETL);
 				CALL proc_crea_dimension_moneda(flagBorradoTablas, baseDatosProd, baseDatosBI, fechaTiempoETL);
 				CALL proc_crea_dimension_territorio(flagBorradoTablas, baseDatosProd, baseDatosBI, fechaTiempoETL);
@@ -56,7 +57,13 @@ BEGIN
 			IF done THEN
 				LEAVE empresa_loop;
 			END IF;
-			-- Aqui van los llamados a procedimientos de actualizacion
+			CALL proc_actualiza_dimension_agente(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
+			CALL proc_actualiza_dimension_cliente(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);			
+			CALL proc_actualiza_dimension_empresa(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
+			CALL proc_actualiza_dimension_info_movimiento(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
+			CALL proc_actualiza_dimension_plaza(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
+			CALL proc_actualiza_dimension_producto(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
+			CALL proc_actualiza_hechos_venta(empresaId, baseDatosProd, baseDatosBI, fechaTiempoETL);
 		END LOOP empresa_loop;
 	END IF;
 	CLOSE curEmpresa;

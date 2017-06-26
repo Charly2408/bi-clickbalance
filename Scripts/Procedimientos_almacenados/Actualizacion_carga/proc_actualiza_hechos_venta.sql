@@ -62,7 +62,7 @@ BEGIN
 		precio DECIMAL(16,4) NOT NULL,
 		cantidad DECIMAL(16,4) NOT NULL,
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual', 
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01, 
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01', 
 		PRIMARY KEY(id))
 	ENGINE = MyISAM;
 

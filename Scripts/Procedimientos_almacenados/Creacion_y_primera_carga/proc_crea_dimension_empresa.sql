@@ -23,7 +23,7 @@ BEGIN
 		regimen VARCHAR(15) NOT NULL DEFAULT 'Desconocido',
 		sector VARCHAR(16) NOT NULL DEFAULT 'Desconocido',
 		version_actual_flag VARCHAR(10) NOT NULL DEFAULT 'Actual',
-		ultima_actualizacion DATE NOT NULL DEFAULT 1901-01-01,
+		ultima_actualizacion DATE NOT NULL DEFAULT '1901-01-01',
 		PRIMARY KEY (empresa_key),
 		UNIQUE INDEX ix_empresa_key (empresa_key ASC),
 		INDEX ix_empresa_nk (empresa_nk ASC))
