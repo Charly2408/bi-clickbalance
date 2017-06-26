@@ -35,7 +35,7 @@ BEGIN
 		SELECT av.empresa, av.venta_id, av.asociado_id, 0 AS es_agente_primario, 
 			IFNULL(av.porcentaje_participacion, 0) AS porcentaje_participacion
 		FROM ", baseDatosProd, ".agente_venta as av
-		INNER JOIN ", baseDatosProd, ".venta AS v
+		INNER JOIN ", baseDatosProd, ".venta AS v ON (av.venta_id = v.id)
 		WHERE av.empresa = ", idEmpresa, " AND (av.created_at > '", @ultimaAct, "' OR av.updated_at > '", @ultimaAct, "');");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
