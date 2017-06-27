@@ -36,7 +36,7 @@ BEGIN
 			IFNULL(av.porcentaje_participacion, 0) AS porcentaje_participacion
 		FROM ", baseDatosProd, ".agente_venta as av
 		INNER JOIN ", baseDatosProd, ".venta AS v ON (av.venta_id = v.id)
-		WHERE av.empresa = ", idEmpresa, " AND (av.created_at > '", @ultimaAct, "' OR av.updated_at > '", @ultimaAct, "') AND created_at <= '", fechaTiempoETL, "';");
+		WHERE av.empresa = ", idEmpresa, " AND (av.created_at > '", @ultimaAct, "' OR av.updated_at > '", @ultimaAct, "') AND v.created_at <= '", fechaTiempoETL, "';");
 	PREPARE myQue FROM @query;
 	EXECUTE myQue;
 
@@ -103,7 +103,7 @@ BEGIN
 
 	UPDATE fact_venta
 	SET version_actual_flag = 'No Actual'
-	WHERE venta_id IN 
+	WHERE venta_nk IN 
 		(
 			SELECT DISTINCT venta_id
 			FROM tmp_hechos_concentrado
