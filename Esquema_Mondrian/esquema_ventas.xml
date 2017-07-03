@@ -1,0 +1,130 @@
+<Schema name="Esquema Ventas CB">
+  <Cube name="Ventas" visible="true" cache="true" enabled="true">
+    <Table name="fact_venta" alias="">
+    </Table>
+    <Dimension type="StandardDimension" visible="true" foreignKey="cliente_key" highCardinality="false" name="dim_cliente">
+      <Hierarchy name="jer_cliente" visible="true" hasAll="true" primaryKey="cliente_key">
+        <Table name="cliente" alias="">
+        </Table>
+        <Level name="Sexo" visible="true" column="sexo" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Estado Civil" visible="true" column="estado_civil" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Regimen" visible="true" column="regimen" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Cliente" visible="true" column="nombre_cliente" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="agente_key" highCardinality="false" name="dim_agente">
+      <Hierarchy name="jer_agente" visible="true" hasAll="true" primaryKey="agente_key">
+        <Table name="agente" alias="">
+        </Table>
+        <Level name="Sexo" visible="true" column="sexo" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Tipo" visible="true" column="tipo_agente" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Estatus" visible="true" column="estatus_agente" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Agente" visible="true" column="nombre_agente" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="empresa_key" highCardinality="false" name="dim_empresa">
+      <Hierarchy name="jer_empresa" visible="true" hasAll="true" primaryKey="empresa_key">
+        <Table name="empresa">
+        </Table>
+        <Level name="Sector" visible="true" column="sector" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Regimen" visible="true" column="regimen" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Raz&#243;n social" visible="true" column="razon_social" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Nombre comercial" visible="true" column="nombre_comercial" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="moneda_key" highCardinality="false" name="dim_moneda">
+      <Hierarchy name="jer_moneda" visible="true" hasAll="true" primaryKey="moneda_key">
+        <Table name="moneda">
+        </Table>
+        <Level name="Moneda" visible="true" column="nombre_moneda" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Abreviatura" visible="true" column="abreviatura" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="TimeDimension" visible="true" foreignKey="tiempo_venta_key" highCardinality="false" name="dim_tiempo">
+      <Hierarchy name="jer_tiempo" visible="true" hasAll="true">
+        <Table name="tiempo">
+        </Table>
+        <Level name="A&#241;o" visible="true" column="anio" type="Numeric" uniqueMembers="true" levelType="TimeYears" hideMemberIf="Never">
+        </Level>
+        <Level name="Mes" visible="true" column="mes" type="String" uniqueMembers="false" levelType="TimeMonths" hideMemberIf="Never">
+        </Level>
+        <Level name="D&#237;a" visible="true" column="dia_del_mes" type="Numeric" uniqueMembers="false" levelType="TimeDays" hideMemberIf="Never" captionColumn="dia_nombre">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="info_movimiento_key" highCardinality="false" name="dim_info_movimiento">
+      <Hierarchy name="jer_movimiento" visible="true" hasAll="true">
+        <Table name="info_movimiento">
+        </Table>
+        <Level name="Movimiento" visible="true" column="nombre_movimiento" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Estatus" visible="true" column="estatus" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="info_pago_key" highCardinality="false" name="dim_info_pago">
+      <Hierarchy name="jer_pago" visible="true" hasAll="true" primaryKey="info_pago_key">
+        <Table name="info_pago">
+        </Table>
+        <Level name="Tipo pago" visible="true" column="tipo_pago" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Estatus pago" visible="true" column="estatus_pago" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="producto_key" highCardinality="false" name="dim_producto">
+      <Hierarchy name="jer_producto" visible="true" hasAll="true" primaryKey="producto_key">
+        <Table name="producto">
+        </Table>
+        <Level name="Grupo" visible="true" column="nombre_grupo" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Tipo" visible="true" column="tipo" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Marca" visible="true" column="marca" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Producto" visible="true" column="nombre_producto" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="plaza_key" name="dim_plaza">
+      <Hierarchy name="jer_plaza" visible="true" hasAll="true" primaryKey="plaza_key">
+        <Table name="plaza" alias="">
+        </Table>
+        <Level name="Plaza" visible="true" column="nombre_plaza" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Dimension type="StandardDimension" visible="true" foreignKey="territorio_key" name="dim_territorio">
+      <Hierarchy name="jer_territorio" visible="true" hasAll="true" primaryKey="territorio_key">
+        <Table name="territorio" alias="">
+        </Table>
+        <Level name="Pa&#237;s" visible="true" column="pais" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Estado" visible="true" column="estado" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="Localidad" visible="true" column="localidad" type="String" uniqueMembers="false" levelType="Regular" hideMemberIf="Never">
+        </Level>
+        <Level name="C&#243;digo postal" visible="true" column="codigo_postal" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Measure name="Importe" column="importe" formatString="$###,##0.000" aggregator="sum" visible="true">
+    </Measure>
+    <Measure name="Unidades vendidas" column="cantidad" formatString="###,##0.000" aggregator="sum" visible="true">
+    </Measure>
+  </Cube>
+</Schema>
