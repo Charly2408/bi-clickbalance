@@ -21,9 +21,9 @@ BEGIN
 	CREATE TABLE IF NOT EXISTS tiempo (
 		fecha_key INT NOT NULL,
 		fecha DATE NOT NULL,
-		anio TINYINT(1) NOT NULL,
+		anio SMALLINT(4) NOT NULL,
 		mes VARCHAR(10) NOT NULL,
-		dia_del_mes TINYINT(1) NOT NULL,
+		dia_del_mes TINYINT(2) NOT NULL,
 		dia_nombre VARCHAR(10) NOT NULL,
 		PRIMARY KEY (fecha_key),
 		UNIQUE INDEX ix_fecha_key (fecha_key ASC))
