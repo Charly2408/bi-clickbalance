@@ -1,10 +1,10 @@
 <Schema name="Esquema Ventas CB">
   <Cube name="Ventas" visible="true" cache="true" enabled="true">
-    <Table name="fact_venta" alias="">
+    <Table name="fact_venta">
     </Table>
     <Dimension type="StandardDimension" visible="true" foreignKey="cliente_key" highCardinality="false" name="dim_cliente">
       <Hierarchy name="jer_cliente" visible="true" hasAll="true" primaryKey="cliente_key">
-        <Table name="cliente" alias="">
+        <Table name="cliente">
         </Table>
         <Level name="Sexo" visible="true" column="sexo" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
         </Level>
@@ -18,7 +18,7 @@
     </Dimension>
     <Dimension type="StandardDimension" visible="true" foreignKey="agente_key" highCardinality="false" name="dim_agente">
       <Hierarchy name="jer_agente" visible="true" hasAll="true" primaryKey="agente_key">
-        <Table name="agente" alias="">
+        <Table name="agente">
         </Table>
         <Level name="Sexo" visible="true" column="sexo" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
         </Level>
@@ -100,17 +100,17 @@
         </Level>
       </Hierarchy>
     </Dimension>
-    <Dimension type="StandardDimension" visible="true" foreignKey="plaza_key" name="dim_plaza">
+    <Dimension type="StandardDimension" visible="true" foreignKey="plaza_key" highCardinality="false" name="dim_plaza">
       <Hierarchy name="jer_plaza" visible="true" hasAll="true" primaryKey="plaza_key">
-        <Table name="plaza" alias="">
+        <Table name="plaza">
         </Table>
         <Level name="Plaza" visible="true" column="nombre_plaza" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
         </Level>
       </Hierarchy>
     </Dimension>
-    <Dimension type="StandardDimension" visible="true" foreignKey="territorio_key" name="dim_territorio">
+    <Dimension type="StandardDimension" visible="true" foreignKey="territorio_key" highCardinality="false" name="dim_territorio">
       <Hierarchy name="jer_territorio" visible="true" hasAll="true" primaryKey="territorio_key">
-        <Table name="territorio" alias="">
+        <Table name="territorio">
         </Table>
         <Level name="Pa&#237;s" visible="true" column="pais" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">
         </Level>
